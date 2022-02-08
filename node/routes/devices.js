@@ -24,11 +24,11 @@ router.post('/add', async (req, res) => {
                         device_ip: req.body.device_ip[index],
                         lan_mac_address: req.body.device_mac_address[index],
                         location: req.body.location[index],
-                        created_time: today
+                        status:'Not configured',
+                        created_time: today,
                       }
                 )
             });
-            console.log(queryData)
 
             db.collection('devices').insertMany(queryData, (err, result) => {
                 if(err) console.log( err );
@@ -40,12 +40,51 @@ router.post('/add', async (req, res) => {
 })
 
 router.post('/showlog', async (req, res) => {
+    console.log('showlog');
+
+    var query={}, dateQuery={}
+    if(req.body.location === undefined || req.body.location === '') {}
+    // else query.location = { $in: [ /Ch/i ] } 
+    else query.location = req.body.location
+    
+    if((req.body.device_model===undefined || req.body.device_model==='')) {}
+    else query.device_model = req.body.device_model
+
+    if((req.body.start===undefined || req.body.start==='')) {}
+    else {
+        var dateTime =  new Date(req.body.start);
+        dateTime.setHours(dateTime.getHours() + 5);
+        dateTime.setMinutes(dateTime.getMinutes() + 30);
+        dateQuery.$gte = dateTime;
+    }
+
+    if((req.body.end===undefined || req.body.end==='')) {}
+    else {
+        var dateTime =  new Date(req.body.end);
+        dateTime.setHours(dateTime.getHours() + 5);
+        dateTime.setMinutes(dateTime.getMinutes() + 31);
+        dateQuery.$lte = dateTime;
+    }
+
+    if((req.body.start===undefined || req.body.start==='') && (req.body.end===undefined || req.body.end==='')) {}
+    else {
+        query.created_time=dateQuery;
+    }
+
+    
+    console.log(query)
     MongoClient.connect()
         .then(() => {
             const db = MongoClient.db("device_mgt");
-            db.collection('devices').find({}).toArray((err, result)=>{
+            db.collection('devices').find(query).toArray((err, result)=>{
                 if(err) console.log( err );
-                res.send(result)
+                console.log(result.length)
+                let modifiedresult= result.map((ele, index)=>{
+                    ele.created_time=ele.created_time.toISOString().slice(0,16)
+                    if(ele.modified_time!==undefined) ele.modified_time=ele.modified_time.toISOString().slice(0,16)
+                    return(ele)
+                })
+                res.send(modifiedresult)
             })
         })
 })
