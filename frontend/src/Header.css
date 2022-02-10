@@ -1,0 +1,68 @@
+.Home{
+    height: 100px;
+    background-color: white;
+}
+
+.header-title
+{   padding-left:20px;
+    color:#c7161e;
+    padding-top: 15px;
+    
+}
+label{
+    font-weight: 600;
+}
+.header-flex
+{  
+    display:flex;
+    align-items:center;  
+    justify-content: space-between; 
+}
+.header-alerticon
+{  
+    color:#c7161e;
+    border-radius: 45%;
+    border:2px solid grey;
+    background: white;
+    padding:5px;
+    box-shadow: 2px 4px 6px #888888;
+    margin-top: 10px;
+}
+.header-notificationtitle
+{   padding-left: 10px;
+    color:#c7161e;
+    padding-top: 20px;
+}
+.NotificationsDiv{
+    position: relative
+}
+.notificationpopup{
+    position: absolute;
+    background-color: white;
+    font-size: medium;
+    font-weight: 500;
+    color: #c7161e;
+    z-index: 1.3;
+    padding:15px;
+    right:0;
+    width:120px;
+    top:68px;
+    border: 1px solid #b8b6b6	;
+    border-top: 0;
+}
+.welcome-text{
+    font-size: 106px;
+    color:#c7161e;
+}
+.Tableplusbutton
+{
+    background-color: transparent;
+    box-shadow: none;
+    border:1px solid grey;
+    margin-top:5px;
+    height: 25px;
+    width: 20px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
