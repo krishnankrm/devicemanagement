@@ -8,7 +8,12 @@ router.post('/add', async (req, res) => {
     MongoClient.connect()
         .then(() => {
             const db = MongoClient.db("device_mgt");
-            var queryData = {"username": req.body.username, "password": req.body.password, "email": req.body.email, "role": req.body.role};
+            var queryData = {
+              username: req.body.username,
+              password: req.body.password,
+              email: req.body.email,
+              role: req.body.role,
+            };
 
 
             db.collection('login').insertOne(queryData, (err, result) => {

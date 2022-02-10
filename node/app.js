@@ -18,6 +18,7 @@ app.use('/login', require('./routes/login'));
 app.use('/users', require('./routes/users_mgt'));
 app.use('/devices', require('./routes/devices'));
 app.use('/configuration', require('./routes/configuration'));
+app.use('/event', require('./routes/events'));
 
 async function main() {
     await MongoClient.connect();

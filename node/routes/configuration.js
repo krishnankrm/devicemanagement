@@ -5,44 +5,81 @@ const mongo = require('mongodb').MongoClient;
 const MongoClient = new mongo(url);
 const axios = require('axios');
 var ping = require('ping');
-
+const net = require('net');
 
 router.post('/connect', async(req, res) => {
+    console.log(req.body)
+    if(req.body.device_protocol === "HTTP"){
+            let res1 = await ping.promise.probe(req.body.device_ip, {
+                timeout: 10,
+                // extra: ['-i', '2'],
+            });
+                console.log(res1.alive)
+            if(res1.alive === true){
+                var today = new Date();
+                today.setHours(today.getHours() + 5);
+                today.setMinutes(today.getMinutes() + 30);
+            
+                
+                MongoClient.connect()
+                .then(() => {
+                    const db = MongoClient.db("device_mgt");
+                    var existingQuery = {device_name: req.body.device_name};
+                    var newData = { $set: {
+                        device_protocol: req.body.device_protocol, 
+                        status:'Configured',
+                        modified_time: today
+                        }
+                    };
+                    db.collection('devices').updateOne(existingQuery, newData, (err, result) => {
+                            if(result.modifiedCount != 0){
+                                return res.status(200).send('Device Configured');
+                            }
+                        })
+                    })
 
-    if(req.body)
-    let k=req.body.device_ip
-    let res1 = await ping.promise.probe(k, {
-           timeout: 10,
-           extra: ['-i', '2'],
-       });
-
-    
-    if(res1.alive === true){
-        var today = new Date();
-        today.setHours(today.getHours() + 5);
-        today.setMinutes(today.getMinutes() + 30);
-    
-        console.log(req.body)
-        MongoClient.connect()
-        .then(() => {
-            const db = MongoClient.db("device_mgt");
-            var existingQuery = {device_name: req.body.device_name};
-            var newData = { $set: {
-                device_protocol: req.body.device_protocol, 
-                status:'Configured',
-                modified_time: today
-                }
-            };
-            db.collection('devices').updateOne(existingQuery, newData, (err, result) => {
-                console.log(result)
-                    if(result.modifiedCount != 0){
-                        return res.status(200).send('Device Configured');
-                    }
-                })
-            })
-
-            .catch((err) => console.log(err))
+                    .catch((err) => console.log(err))
+            }
+            else{
+                return res.status(208).send('Connection failed')
+            }
     }
+    else if(req.body.device_protocol === "Modbus-TCP"){
+
+        var client = net.connect({port: req.body.port, host:req.body.device_ip},function(){    
+            console.log('connected')
+            var today = new Date();
+            today.setHours(today.getHours() + 5);
+            today.setMinutes(today.getMinutes() + 30);
+        
+            
+            MongoClient.connect()
+            .then(() => {
+                const db = MongoClient.db("device_mgt");
+                var existingQuery = {device_name: req.body.device_name};
+                var newData = { $set: {
+                    device_protocol: req.body.device_protocol, 
+                    status:'Configured',
+                    modified_time: today,
+                    port: req.body.port
+                    }
+                };
+                db.collection('devices').updateOne(existingQuery, newData, (err, result) => {
+                        if(result.modifiedCount != 0){
+                            return res.status(200).send('Device Configured');
+                        }
+                    })
+                })
+           
+
+        });
+          
+        client.on('error', function(err){
+            return res.status(208).send('Connection failed')
+        })
+        
+    }
+
 
 })
 
