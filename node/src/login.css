@@ -1,0 +1,57 @@
+
+.loginPage{
+    background: url('4.png') no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;    
+  }
+
+ 
+.loginlink
+{ border:0;
+  border-radius: 0;
+  border-bottom:  2px solid #33cde6;
+  padding-top:15px;
+  background-color: transparent;
+  color:white;
+}
+
+.loginlink:focus
+{ 
+  border:0   ;
+  border-radius: 0;
+  background-color: transparent;
+  border-bottom: 3px solid rgb(101, 241, 101);
+  outline: none;
+  padding-top:15px;
+  color:white;
+   outline: none !important;
+  box-shadow: none;
+}
+
+#loginlbl
+{  color:white;
+
+}
+
+
+.login-button {
+  border-color: #33cde6;
+  text-align: center;
+  background-color: #33cde6;
+  font-size: 20px;
+  width: 12vw;
+  transition: all 150ms ease-in-out;
+  border-radius: 25px;
+  color: #fff;
+  box-shadow: 0 0 40px 40px #33cde6 inset, 0 0 0 0 #33cde6;
+} 
+
+
+.login-button:hover{
+  color: black !important;
+  background-color: whitesmoke !important;
+  box-shadow: 0 0 19px 0 #33cde6 inset, 0 0 10px 4px #33cde6;
+}
