@@ -4,7 +4,6 @@ import './Events.css'
 import  configData  from './config.json';
 import Sidebar1 from './Sidebar'
 import Header from './Header'
-import { TabPanel } from "@material-ui/lab";
 
 var backendip=configData.backendip
 
